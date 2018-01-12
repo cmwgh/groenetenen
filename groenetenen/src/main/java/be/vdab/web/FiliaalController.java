@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import be.vdab.services.FiliaalService;
 
@@ -25,8 +26,9 @@ FiliaalController(FiliaalService filiaalService) {
 this.filiaalService = filiaalService;
 }
 @GetMapping
-String findAll() {
-return FILIALEN_VIEW;
+ModelAndView findAll() {
+return new ModelAndView(FILIALEN_VIEW, "filialen", filiaalService.findAll());
+//		.addObject("werknemers", werknemerService.findAll());
 }
 @GetMapping("toevoegen")
 String createForm() {
