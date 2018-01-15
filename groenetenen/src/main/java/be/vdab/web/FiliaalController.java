@@ -14,30 +14,42 @@ import be.vdab.services.FiliaalService;
 @RequestMapping("/filialen")
 class FiliaalController {
 	private static final String REDIRECT_URL_NA_TOEVOEGEN = "redirect:/filialen";
-	private static final Logger LOGGER =
-	Logger.getLogger(FiliaalController.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(FiliaalController.class.getName());
+	private static final String FILIAAL_VIEW = "filialen/filiaal";
 	// importeer Logger uit de package java.util.logging
-private static final String FILIALEN_VIEW = "filialen/filialen";
-private static final String TOEVOEGEN_VIEW = "filialen/toevoegen";
-private final FiliaalService filiaalService;
-FiliaalController(FiliaalService filiaalService) {
-// Spring injecteert de parameter filiaalService met de bean die de interface
-// FiliaalService implementeert: DefaultFiliaalService
-this.filiaalService = filiaalService;
-}
-@GetMapping
-ModelAndView findAll() {
-return new ModelAndView(FILIALEN_VIEW, "filialen", filiaalService.findAll());
-		//.addObject("werknemers", werknemerService.findAll());
-}
-@GetMapping("toevoegen")
-String createForm() {
-return TOEVOEGEN_VIEW;
-}
-@PostMapping
-String create() {
-	// later voeg je een record toe aan de database
-	LOGGER.info("filiaal record toevoegen aan database");
-	return REDIRECT_URL_NA_TOEVOEGEN;
+	private static final String FILIALEN_VIEW = "filialen/filialen";
+	private static final String TOEVOEGEN_VIEW = "filialen/toevoegen";
+	private final FiliaalService filiaalService;
+
+	FiliaalController(FiliaalService filiaalService) {
+		// Spring injecteert de parameter filiaalService met de bean die de
+		// interface
+		// FiliaalService implementeert: DefaultFiliaalService
+		this.filiaalService = filiaalService;
+	}
+
+	@GetMapping
+	ModelAndView findAll() {
+		return new ModelAndView(FILIALEN_VIEW, "filialen", filiaalService.findAll());
+		// .addObject("werknemers", werknemerService.findAll());
+	}
+
+	@GetMapping("toevoegen")
+	String createForm() {
+		return TOEVOEGEN_VIEW;
+	}
+
+	@PostMapping
+	String create() {
+		// later voeg je een record toe aan de database
+		LOGGER.info("filiaal record toevoegen aan database");
+		return REDIRECT_URL_NA_TOEVOEGEN;
+	}
+
+	@GetMapping(params = "id")
+	ModelAndView read(long id) {
+		ModelAndView modelAndView = new ModelAndView(FILIAAL_VIEW);
+		filiaalService.read(id).ifPresent(filiaal -> modelAndView.addObject(filiaal));
+		return modelAndView;
 	}
 }
