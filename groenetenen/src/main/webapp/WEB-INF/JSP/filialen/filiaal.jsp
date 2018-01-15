@@ -1,7 +1,6 @@
 <%@page contentType='text/html' pageEncoding='UTF-8' session='false'%>
 <%@taglib prefix='spring' uri='http://www.springframework.org/tags'%>
 <%@taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core'%>
-<%@taglib prefix='fmt' uri='http://java.sun.com/jsp/jstl/fmt'%>
 <%@taglib prefix='v' uri='http://vdab.be/tags'%>
 <!doctype html>
 <html lang='nl'>
@@ -19,12 +18,13 @@
 <dt>Gemeente</dt><dd>${filiaal.adres.gemeente}</dd>
 <dt>Type</dt><dd>${filiaal.hoofdFiliaal ? "Hoofdfiliaal" : "Bijfiliaal"}</dd>
 <dt>Waarde gebouw</dt>
-<dd>&euro; <fmt:formatNumber value='${filiaal.waardeGebouw}'/></dd>
+<dd>&euro; <spring:eval expression='filiaal.waardeGebouw'/></dd>
 <dt>Ingebruikname</dt>
-<fmt:parseDate value="${filiaal.inGebruikName}" pattern="yyyy-MM-dd"
-var="inGebruikNameAlsDate" type="date"/>
-<dd><fmt:formatDate value='${inGebruikNameAlsDate}' type="date"
-dateStyle="short"/></dd></dl>
+<fmt:formatDate value='${filiaal.inGebruikName}'
+type='date' dateStyle='short'/>
+<%-- <fmt:parseDate value="${filiaal.inGebruikName}" pattern="yyyy-MM-dd" --%>
+<%-- var="inGebruikNameAlsDate" type="date"/> --%>
+<dd><spring:eval expression='filiaal.inGebruikName'/></dd></dl>
 <spring:url value='/filialen/{id}/verwijderen' var='verwijderURL'>
 <spring:param name='id' value='${filiaal.id}'/>
 </spring:url>
