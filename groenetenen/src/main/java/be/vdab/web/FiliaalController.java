@@ -28,7 +28,7 @@ this.filiaalService = filiaalService;
 @GetMapping
 ModelAndView findAll() {
 return new ModelAndView(FILIALEN_VIEW, "filialen", filiaalService.findAll());
-//		.addObject("werknemers", werknemerService.findAll());
+		//.addObject("werknemers", werknemerService.findAll());
 }
 @GetMapping("toevoegen")
 String createForm() {
