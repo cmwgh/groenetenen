@@ -1,4 +1,5 @@
 <%@page contentType='text/html' pageEncoding='UTF-8' session='false'%>
+<%@taglib prefix='spring' uri='http://www.springframework.org/tags'%>
 <%@taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core'%>
 <%@taglib prefix='fmt' uri='http://java.sun.com/jsp/jstl/fmt'%>
 <%@taglib prefix='v' uri='http://vdab.be/tags'%>
@@ -24,6 +25,12 @@
 var="inGebruikNameAlsDate" type="date"/>
 <dd><fmt:formatDate value='${inGebruikNameAlsDate}' type="date"
 dateStyle="short"/></dd></dl>
+<spring:url value='/filialen/{id}/verwijderen' var='verwijderURL'>
+<spring:param name='id' value='${filiaal.id}'/>
+</spring:url>
+<form action='${verwijderURL}' method='post'>
+<input type='submit' value='Verwijderen'>
+</form>
 </c:when>
 <c:otherwise>
 <div class='fout'>Filiaal niet gevonden</div>

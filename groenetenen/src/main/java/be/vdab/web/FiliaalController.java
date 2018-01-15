@@ -1,5 +1,6 @@
 package be.vdab.web;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.springframework.stereotype.Controller;
@@ -8,7 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import be.vdab.entities.Filiaal;
+import be.vdab.exceptions.FiliaalHeeftNogWerknemersException;
 import be.vdab.services.FiliaalService;
 
 @Controller
@@ -20,6 +24,10 @@ class FiliaalController {
 	// importeer Logger uit de package java.util.logging
 	private static final String FILIALEN_VIEW = "filialen/filialen";
 	private static final String TOEVOEGEN_VIEW = "filialen/toevoegen";
+	private static final String REDIRECT_URL_FILIAAL_NIET_GEVONDEN = "redirect:/filialen";
+	private static final String REDIRECT_URL_NA_VERWIJDEREN = "redirect:/filialen/{id}/verwijderd";
+	private static final String REDIRECT_URL_HEEFT_NOG_WERKNEMERS = "redirect:/filialen/{id}";
+	private static final String VERWIJDERD_VIEW = "filialen/verwijderd";
 	private final FiliaalService filiaalService;
 
 	FiliaalController(FiliaalService filiaalService) {
@@ -27,6 +35,22 @@ class FiliaalController {
 		// interface
 		// FiliaalService implementeert: DefaultFiliaalService
 		this.filiaalService = filiaalService;
+	}
+
+	@PostMapping("{id}/verwijderen")
+	String delete(@PathVariable long id, RedirectAttributes redirectAttributes) {
+		Optional<Filiaal> optionalFiliaal = filiaalService.read(id);
+		if (!optionalFiliaal.isPresent()) {
+			return REDIRECT_URL_FILIAAL_NIET_GEVONDEN;
+		}
+		try {
+			filiaalService.delete(id);
+			redirectAttributes.addAttribute("id", id).addAttribute("naam", optionalFiliaal.get().getNaam());
+			return REDIRECT_URL_NA_VERWIJDEREN;
+		} catch (FiliaalHeeftNogWerknemersException ex) {
+			redirectAttributes.addAttribute("id", id).addAttribute("fout", "Filiaal heeft nog werknemers");
+			return REDIRECT_URL_HEEFT_NOG_WERKNEMERS;
+		}
 	}
 
 	@GetMapping
@@ -52,5 +76,10 @@ class FiliaalController {
 		ModelAndView modelAndView = new ModelAndView(FILIAAL_VIEW);
 		filiaalService.read(id).ifPresent(filiaal -> modelAndView.addObject(filiaal));
 		return modelAndView;
+	}
+
+	@GetMapping("{id}/verwijderd")
+	String deleted() {
+		return VERWIJDERD_VIEW;
 	}
 }
