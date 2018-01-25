@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import be.vdab.entities.Filiaal;
+import be.vdab.valueobjects.PostcodeReeks;
 
 public interface FiliaalRepository {
 	void create(Filiaal filiaal);
-
+	List<Filiaal> findByPostcodeReeks(PostcodeReeks reeks);
 	Optional<Filiaal> read(long id);
 
 	void update(Filiaal filiaal);

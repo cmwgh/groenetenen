@@ -62,11 +62,7 @@ class FiliaalController {
 	return new ModelAndView(PER_POSTCODE_VIEW).addObject(reeks);
 	}
 	
-	@GetMapping(params = {"vanpostcode", "totpostcode"})
-	ModelAndView findByPostcodeReeks(PostcodeReeks reeks) {
-	return new ModelAndView(PER_POSTCODE_VIEW,
-	"filialen", filiaalService.findByPostcodeReeks(reeks));
-	}
+
 	@GetMapping
 	ModelAndView findAll() {
 		return new ModelAndView(FILIALEN_VIEW, "filialen", filiaalService.findAll())
@@ -96,5 +92,10 @@ class FiliaalController {
 	@GetMapping("{id}/verwijderd")
 	String deleted() {
 		return VERWIJDERD_VIEW;
+	}
+	@GetMapping(params = {"vanpostcode", "totpostcode"})
+	ModelAndView findByPostcodeReeks(PostcodeReeks reeks) {
+	return new ModelAndView(PER_POSTCODE_VIEW,
+	"filialen", filiaalService.findByPostcodeReeks(reeks));
 	}
 }
