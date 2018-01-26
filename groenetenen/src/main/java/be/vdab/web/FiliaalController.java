@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
@@ -98,7 +100,7 @@ class FiliaalController {
 		return VERWIJDERD_VIEW;
 	}
 	@GetMapping(params = {"vanpostcode", "totpostcode"})
-	ModelAndView findByPostcodeReeks(PostcodeReeks reeks,
+	ModelAndView findByPostcodeReeks(@Valid PostcodeReeks reeks,
 	BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView(PER_POSTCODE_VIEW);
 		if ( ! bindingResult.hasErrors()) {
@@ -112,8 +114,8 @@ class FiliaalController {
 		}
 		return modelAndView;
 	}
-	@InitBinder("postcodeReeks")
-	void initBinderPostcodeReeks(DataBinder dataBinder) {
-	dataBinder.setRequiredFields("vanpostcode", "totpostcode");
-	}
+//	@InitBinder("postcodeReeks")
+//	void initBinderPostcodeReeks(DataBinder dataBinder) {
+//	dataBinder.setRequiredFields("vanpostcode", "totpostcode");
+//	}
 }
